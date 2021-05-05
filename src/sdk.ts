@@ -247,11 +247,9 @@ export class SunbirdSdk {
 
     public async init(sdkConfig: SdkConfig) {
         this._container = new Container();
-
         this._container.bind<Container>(InjectionTokens.CONTAINER).toConstantValue(this._container);
 
         this._container.bind<number>(InjectionTokens.DB_VERSION).toConstantValue(28);
-
         this._container.bind<(Migration | MigrationFactory)[]>(InjectionTokens.DB_MIGRATION_LIST).toConstantValue([
             new ProfileSyllabusMigration(),
             new GroupProfileMigration(),
@@ -269,7 +267,7 @@ export class SunbirdSdk {
             },
             new ContentGeneralizationMigration(),
         ]);
-
+        
         switch (sdkConfig.platform) {
             case 'cordova':
                 this._container.bind<SharedPreferences>(InjectionTokens.SHARED_PREFERENCES)
@@ -282,9 +280,7 @@ export class SunbirdSdk {
             default:
                 throw new Error('FATAL_ERROR: Invalid platform');
         }
-
         this._container.bind<DbService>(InjectionTokens.DB_SERVICE).to(DbCordovaService).inSingletonScope();
-
         this._container.bind<FileService>(InjectionTokens.FILE_SERVICE).to(FileServiceImpl).inSingletonScope();
 
         this._container.bind<SdkConfig>(InjectionTokens.SDK_CONFIG).toConstantValue(sdkConfig);
@@ -292,7 +288,7 @@ export class SunbirdSdk {
         this._container.bind<DeviceInfo>(InjectionTokens.DEVICE_INFO).to(DeviceInfoImpl).inSingletonScope();
 
         this._container.bind<EventsBusService>(InjectionTokens.EVENTS_BUS_SERVICE).to(EventsBusServiceImpl).inSingletonScope();
-
+        
         this._container.bind<AppInfo>(InjectionTokens.APP_INFO).to(AppInfoImpl).inSingletonScope();
 
         this._container.bind<ApiService>(InjectionTokens.API_SERVICE).to(ApiServiceImpl).inSingletonScope();
@@ -300,7 +296,7 @@ export class SunbirdSdk {
         this._container.bind<AuthService>(InjectionTokens.AUTH_SERVICE).to(AuthServiceImpl).inSingletonScope();
 
         this._container.bind<KeyValueStore>(InjectionTokens.KEY_VALUE_STORE).to(KeyValueStoreImpl).inSingletonScope();
-
+        
         this._container.bind<SystemSettingsService>(InjectionTokens.SYSTEM_SETTINGS_SERVICE)
             .to(SystemSettingsServiceImpl).inSingletonScope();
 
@@ -315,7 +311,7 @@ export class SunbirdSdk {
         this._container.bind<ErrorLoggerService>(InjectionTokens.ERROR_LOGGER_SERVICE).to(ErrorLoggerServiceImpl).inSingletonScope();
 
         this._container.bind<ZipService>(InjectionTokens.ZIP_SERVICE).to(ZipServiceImpl).inSingletonScope();
-
+        
         this._container.bind<TelemetryService>(InjectionTokens.TELEMETRY_SERVICE).to(TelemetryServiceImpl).inSingletonScope();
 
         this._container.bind<ContentFeedbackService>(InjectionTokens.CONTENT_FEEDBACK_SERVICE)
@@ -330,7 +326,7 @@ export class SunbirdSdk {
         this._container.bind<DownloadService>(InjectionTokens.DOWNLOAD_SERVICE).to(DownloadServiceImpl).inSingletonScope();
 
         this._container.bind<ContentService>(InjectionTokens.CONTENT_SERVICE).to(ContentServiceImpl).inSingletonScope();
-
+        
         this._container.bind<CourseService>(InjectionTokens.COURSE_SERVICE).to(CourseServiceImpl).inSingletonScope();
 
         this._container.bind<SummarizerService>(InjectionTokens.SUMMARIZER_SERVICE).to(SummarizerServiceImpl).inSingletonScope();
@@ -344,7 +340,7 @@ export class SunbirdSdk {
         this._container.bind<StorageService>(InjectionTokens.STORAGE_SERVICE).to(StorageServiceImpl).inSingletonScope();
 
         this._container.bind<NotificationService>(InjectionTokens.NOTIFICATION_SERVICE).to(NotificationServiceImpl).inSingletonScope();
-
+        
         this._container.bind<NetworkInfoService>(InjectionTokens.NETWORKINFO_SERVICE).to(NetworkInfoServiceImpl).inSingletonScope();
 
         this._container.bind<SearchHistoryService>(InjectionTokens.SEARCH_HISTORY_SERVICE).to(SearchHistoryServiceImpl).inSingletonScope();
@@ -356,15 +352,16 @@ export class SunbirdSdk {
             .inSingletonScope();
 
         this._container.bind<FaqService>(InjectionTokens.FAQ_SERVICE).to(FaqServiceImpl).inSingletonScope();
-
+        
         this._container.bind<ArchiveService>(InjectionTokens.ARCHIVE_SERVICE).to(ArchiveServiceImpl).inSingletonScope();
 
         this._container.bind<NetworkQueue>(InjectionTokens.NETWORK_QUEUE).to(NetworkQueueImpl).inSingletonScope();
 
         this._container.bind<DiscussionService>(InjectionTokens.DISCUSSION_SERVICE).to(DiscussionServiceImpl).inSingletonScope();
+        
 
         const sharedPreferences = this.sharedPreferences;
-
+        
         await CsModule.instance.init({
                 core: {
                     httpAdapter: sdkConfig.platform === 'web' ? 'HttpClientBrowserAdapter' : 'HttpClientCordovaAdapter',
@@ -415,17 +412,19 @@ export class SunbirdSdk {
                     return sharedPreferences.getString(key).toPromise();
                 }
             });
-
+            
         this._container.bind<CsHttpService>(CsInjectionTokens.HTTP_SERVICE).toConstantValue(CsModule.instance.httpService);
         this._container.bind<CsGroupService>(CsInjectionTokens.GROUP_SERVICE).toConstantValue(CsModule.instance.groupService);
         this._container.bind<CsCourseService>(CsInjectionTokens.COURSE_SERVICE).toConstantValue(CsModule.instance.courseService);
         this._container.bind<CsUserService>(CsInjectionTokens.USER_SERVICE).toConstantValue(CsModule.instance.userService);
         this._container.bind<CsDiscussionService>(CsInjectionTokens.DISCUSSION_SERVICE).toConstantValue(CsModule.instance.discussionService);
-
-        await this.dbService.init();
+        alert("Container 7");
+        //await this.dbService.init();
+        alert("Container 7.1");
         await this.appInfo.init();
+        alert("Container 7.2");
         await this.preInit().toPromise();
-
+        alert("Container 8");
         this._isInitialised = true;
 
         this.postInit().subscribe();
@@ -469,7 +468,7 @@ export class SunbirdSdk {
     private preInit() {
         return this.telemetryService.preInit().pipe(
             concatMap(() => this.frameworkService.preInit().pipe(
-                concatMap(() => this.profileService.preInit())
+                //concatMap(() => this.profileService.preInit())
             ))
         );
     }
