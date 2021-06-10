@@ -418,8 +418,10 @@ export class SunbirdSdk {
         this._container.bind<CsCourseService>(CsInjectionTokens.COURSE_SERVICE).toConstantValue(CsModule.instance.courseService);
         this._container.bind<CsUserService>(CsInjectionTokens.USER_SERVICE).toConstantValue(CsModule.instance.userService);
         this._container.bind<CsDiscussionService>(CsInjectionTokens.DISCUSSION_SERVICE).toConstantValue(CsModule.instance.discussionService);
+        this._container.bind<CsContentService>(CsInjectionTokens.CONTENT_SERVICE).toConstantValue(CsModule.instance.contentService);
+
         alert("Container 7");
-        //await this.dbService.init();
+        // await this.dbService.init();
         alert("Container 7.1");
         await this.appInfo.init();
         alert("Container 7.2");
@@ -468,7 +470,7 @@ export class SunbirdSdk {
     private preInit() {
         return this.telemetryService.preInit().pipe(
             concatMap(() => this.frameworkService.preInit().pipe(
-                //concatMap(() => this.profileService.preInit())
+                // concatMap(() => this.profileService.preInit())
             ))
         );
     }
